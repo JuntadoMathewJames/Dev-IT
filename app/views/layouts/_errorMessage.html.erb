@@ -1,0 +1,9 @@
+  <% if entity.errors.any? %>
+  <div style="color: red">
+    <ul>
+      <% entity.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

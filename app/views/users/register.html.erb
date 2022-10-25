@@ -1,0 +1,36 @@
+<div id = "login_bg" style=" height:100%;background-position:center; background-repeat:no-repeat;background-size:cover; ">
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="login-wrap p-0" style  = "margin-top:20%;">
+            <br>
+            <h2>Registration Form</h2>
+            <br>
+            <%= form_with url:"/register/proceed", method: :post do |form|%>
+              <div class="form-group">
+                <label for = "username"><strong>Username:</strong></label>
+                <%= form.text_field :username, class:"form-control", placeholder: "Enter Username"%>
+              </div>
+              <div class="form-group">
+                <label for = "username"><strong>Password:</strong></label>
+                <%= form.password_field :password_digest, class: "form-control", placeholder: "Enter Password"%>
+              </div>
+              <div class="form-group">
+                <label for = "username"><strong>Confirm Password:</strong></label>
+                <%= form.password_field :confirm_password, class: "form-control", placeholder: "Confirm Password"%>
+              </div>
+              <p id = "errMsg"style= "color:red; text-align:center;"></p>
+              <div id = "errorArea"></div>
+              <div class="form-group">
+                <%= form.submit "REGISTER", class:"form-control", style: "background-color:green; color:white"%>
+              </div>
+            <% end %>
+            <br>
+            <a href = "/login"><button class = "form-control btn btn-danger">CANCEL REGISTRATION</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

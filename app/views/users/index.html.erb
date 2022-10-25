@@ -1,0 +1,33 @@
+<style>
+  body, html{
+      height:100%;
+  }
+</style>
+<div id = "login_bg" style=" height:100%;background-position:center; background-repeat:no-repeat;background-size:cover; ">
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="login-wrap p-0" style  = "margin-top:20%;">
+            <h2 style = "text-align:center; font-family: 'Lucida Console';">Business, Transaction, Accounting and Inventory Management System</h2>
+            <br>
+            <%= form_with url:"/login/proceed", method: :post do |form|%>
+              <div class="form-group">
+                <%= form.text_field :username, class:"form-control", placeholder: "Enter Username"%>
+              </div>
+              <div class="form-group">
+                <%= form.password_field :password, class: "form-control", placeholder: "Enter Password"%>
+              </div>
+              <p id = "errMsg"style= "color:red; text-align:center;"></p>
+              <div class="form-group">
+                <%= form.submit "LOGIN", class:"form-control", style: "background-color:black; color:white"%>
+              </div>
+            <% end %>
+            <br>
+            <a href = "/register" style ="text-decoration:none;"><button class = "form-control" style = "background-color:green; color:white;">REGISTER</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pos_id: 1
+  dateOfTransaction: 2022-10-25
+  totalPrice: 9.99
+
+two:
+  pos_id: 1
+  dateOfTransaction: 2022-10-25
+  totalPrice: 9.99
