@@ -1,6 +1,8 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
-
+  before_action :is_subscribed
+  before_action :is_logged_in
+ 
   # GET /products or /products.json
   def index
     @products = Product.all

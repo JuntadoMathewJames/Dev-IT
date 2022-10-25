@@ -2,9 +2,11 @@ Rails.application.routes.draw do
   resources :products
 
   get "/login", to: "users#index"
-  get "/register",to:"users#register"
   get "/logout", to:"users#logout"
   get "/subscribe",to:"users#subscribe"
+  get "/dashboard",to:"general_features#index"
+  get "/pos",to:"general_features#pos"
+  get "/account_details",to:"general_features#account_details"
 
   post "/register/proceed",to:"users#register_proceed"
   post "/login/proceed",to:"users#login_proceed"

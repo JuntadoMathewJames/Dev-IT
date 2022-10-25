@@ -1,0 +1,163 @@
+ <!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container px-lg-5">
+    <a class="navbar-brand" href = "/dashboard">BTAIMS</a>
+    <% user = User.find(session[:user_id])%>
+    <a href = "#" style = "color:white; text-decoration:none;">Hi <%= user.username.upcase%>!</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item "><a class="nav-link active" aria-current="page" href="/dashboard">Home</a></li>
+        <% if session[:user_status] == "SUBSCRIBED"%>
+          <li class="nav-item"><a class="nav-link " aria-current="page" href="/pos">POS</a></li>
+        <% end %>
+        <% if session[:user_status] == "UNSUBSCRIBED"%>
+          <li class="nav-item"><a class="nav-link" href="/subscribe">Subscribe</a></li>
+        <% end %>
+        <li class="nav-item"><a class="nav-link" href="/account_details">Account Details</a></li>
+      </ul>
+      <ul class="form-inline my-2 my-lg-0">
+        <li class="nav-item "><a class="nav-link" aria-current="page" href="/logout" style = "color:red;">LOGOUT</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<br>
+<br>
+<div style="overflow-x:hidden;" class="container-fluid text-xs-center">
+  <% user = User.find(session[:user_id]) %>
+  <h2 style = "text-align:center;">Welcome <%= user.username.upcase %>, to the Scalable Point of Sales System</h2>
+  <br>
+  <div class = "row" style = "margin:25px 25px 25px 25px;">
+    <div class= "col-md-6">
+      <div class="card">
+        <div class="card-body"  >
+          <div class="card-deck"  >
+            <div class="card shadow" >
+              <br>
+              <h4 style = "text-align:center;"><strong>Our Vision</strong></h4>
+              <p  style = "text-align:justify; margin: 25px 25px 25px 25px;">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies, libero eu convallis vestibulum, magna arcu semper dolor, sed sodales nisi ante in turpis. Mauris in ante quis leo ornare eleifend vel vel urna. Nunc aliquam metus nec ultrices consectetur. Duis tempus lobortis fermentum. Mauris ultricies sem vel magna efficitur, a eleifend dui ultrices. Nam varius ultricies elit ac lacinia. Nullam scelerisque malesuada consectetur. Duis ex nulla, egestas sit amet eleifend dictum, iaculis eget magna. Ut et suscipit ipsum. Fusce vitae leo tempor, placerat elit eget, blandit quam. Curabitur vestibulum fringilla massa, non viverra augue condimentum et. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed nulla velit. Nullam fermentum, quam ac laoreet maximus, nisl tellus egestas arcu, ut ultrices enim sapien ullamcorper ante. Nunc tristique non eros in sodales. Donec fermentum diam eget purus rutrum ultrices.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class= "col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-deck">
+            <div class="card shadow">
+              <br>
+              <h4 style = "text-align:center;"><strong>Our Mission</strong></h4>
+              <p  style = "text-align:justify; margin: 25px 25px 25px 25px;">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies, libero eu convallis vestibulum, magna arcu semper dolor, sed sodales nisi ante in turpis. Mauris in ante quis leo ornare eleifend vel vel urna. Nunc aliquam metus nec ultrices consectetur. Duis tempus lobortis fermentum. Mauris ultricies sem vel magna efficitur, a eleifend dui ultrices. Nam varius ultricies elit ac lacinia. Nullam scelerisque malesuada consectetur. Duis ex nulla, egestas sit amet eleifend dictum, iaculis eget magna. Ut et suscipit ipsum. Fusce vitae leo tempor, placerat elit eget, blandit quam. Curabitur vestibulum fringilla massa, non viverra augue condimentum et. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed nulla velit. Nullam fermentum, quam ac laoreet maximus, nisl tellus egestas arcu, ut ultrices enim sapien ullamcorper ante. Nunc tristique non eros in sodales. Donec fermentum diam eget purus rutrum ultrices.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="card" style = "margin: 25px 25px 25px 25px;">
+    <div class="card-body">
+      <div class="card-deck">
+        <div class="card shadow">
+          <br>
+          <h4 style = "text-align:center;">Transaction Page</h4>
+          <div class = "row">
+            <div class = "col-md-8">
+              <div class="card-body">
+                <div class="card-deck">
+                  <div class="card shadow">
+                    <br>
+                    <h4 style = "text-align:center;">Image</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class = "col-md-4">
+              <div class="card-body">
+                <div class="card-deck">
+                  <div class="card shadow">
+                    <br>
+                    <h4 style = "text-align:center;">Description</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="card" style = "margin: 25px 25px 25px 25px;">
+    <div class="card-body">
+      <div class="card-deck">
+        <div class="card shadow">
+          <br>
+          <h4 style = "text-align:center;">Inventory Page</h4>
+          <div class = "row">
+            <div class = "col-md-8">
+              <div class="card-body">
+                <div class="card-deck">
+                  <div class="card shadow">
+                    <br>
+                    <h4 style = "text-align:center;">Image</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class = "col-md-4">
+              <div class="card-body">
+                <div class="card-deck">
+                  <div class="card shadow">
+                    <br>
+                    <h4 style = "text-align:center;">Description</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="card" style = "margin: 25px 25px 25px 25px;">
+    <div class="card-body">
+      <div class="card-deck">
+        <div class="card shadow">
+          <br>
+          <h4 style = "text-align:center;">Sales Page</h4>
+          <div class = "row">
+            <div class = "col-md-8">
+              <div class="card-body">
+                <div class="card-deck">
+                  <div class="card shadow">
+                    <br>
+                    <h4 style = "text-align:center;">Image</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class = "col-md-4">
+              <div class="card-body">
+                <div class="card-deck">
+                  <div class="card shadow">
+                    <br>
+                    <h4 style = "text-align:center;">Description</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
