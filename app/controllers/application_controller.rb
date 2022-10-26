@@ -15,4 +15,35 @@ class ApplicationController < ActionController::Base
     def set_current_url
         session[:prev_url] = request.original_url
     end
+
+    def checkUserUnsubscriptionDate
+        user = User.find(session[:user_id])
+        if user.unsubscriptionDate.present?
+            if Date.today() == user.unsubscriptionDate
+                user.status = "UNSUBSCRIBED"
+                session[:user_status] = user.status
+                user.unsubscriptionDate = nil
+                user.save
+                redirect_to "account_details/subscribe"
+            end
+        end
+    end
+
+    def checkUserRenewalDate
+        user = User.find(session[:user_id])
+        if user.renewDate.present?
+            if Date.today() == user.renewDate
+                subscription = Subscription.new
+                subscription.user_id = user.id
+                subscription.payment = 60
+                subscription.dateOfPayment = Date.today()
+                subscription.save
+                user.status = "SUBSCRIBED"
+                user.renewDate = nil
+                user.unsubscriptionDate = nil
+                session[:user_status]= user.status
+                user.save
+            end
+        end
+    end
 end

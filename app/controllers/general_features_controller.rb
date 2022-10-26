@@ -7,7 +7,10 @@ class GeneralFeaturesController < ApplicationController
 
     def pos
       
+    end
 
+    def account_details
+        @method = params[:method]
     end
 
 end

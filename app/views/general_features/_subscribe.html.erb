@@ -1,0 +1,119 @@
+ <% if session[:user_status] == "UNSUBSCRIBED"%>
+  <div id = "login_bg" style="  margin: 25px 25px 25px 25px; ">
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-left">
+          <div class="col-md-6 col-lg-4">
+            <div class="login-wrap p-0" >
+              <h2>Subscription Form</h2>
+              <br>
+              <%= form_with url:"/subscribe/proceed", method: :post do |form|%>
+                <div class="form-group">
+                  <label for = "username"><strong>Date of Payment:</strong></label>
+                  <%= form.hidden_field :user_id, class: "form-control", :value => session[:user_id] %>
+                  <%= form.hidden_field :dateOfPayment, class: "form-control", :value => Date.today()%>
+                  <%= form.text_field :display_dateOfPayment, class: "form-control", :value => Date.today(), :disabled => true%>
+                </div>
+                <div class="form-group">
+                  <label for = "username"><strong>Amount:</strong></label>
+                  <%= form.hidden_field :payment, class:"form-control", :value => "60" %>
+                  <%= form.number_field :display_payment, class:"form-control", :value => "60", :disabled =>true %>
+                </div>
+                <div class="form-group">
+                  <label for = "confirm password"><strong>Confirm Password:</strong></label>
+                  <%= form.password_field :confirm_password, class: "form-control", placeholder: "Confirm Password"%>
+                </div>
+                <br>
+                <div id = "errorArea"></div>
+                <div class="form-group">
+                  <%= form.submit "SUBSCRIBE", class:"form-control", style: "background-color:green; color:white"%>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+<% else %>
+  <% user = User.find(session[:user_id])%>
+  <% if user.unsubscriptionDate.present? %>
+    <div class = "row" style = "margin: 25px 25px 25px 25px">
+      <div class = "col-md-6">
+        <h2>Your subscription will be cancelled on <%= user.unsubscriptionDate %></h2>
+        <br>
+        <h4>List of Payments</h4>
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Date of Payment</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% subscriptions = Subscription.all.where("user_id = ?",session[:user_id])%>
+            <% subscriptions.each do |sub|%>
+              <tr>
+                <td><%= sub.dateOfPayment %></td>
+                <td><%= sub.payment %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class = "col-md-6">
+        <br>
+        <br>
+        <br>
+        <p style = "text-align:justify;">Your subscription will no longer be automatically renewed.</p>
+        <br>
+        <p style = "text-align:justify;">To automatically renew subscription, please input your password first then click the <strong>"Renew Subscription"</strong> button below. This will automatically renew your subscription on <%= user.unsubscriptionDate %>.</p>
+        <%= form_with url:"/renew_subscription", method: :post do |form|%>
+          <%= form.hidden_field :user_id, :value => session[:user_id]%>
+          <%= form.password_field :confirm_password, class: "form-control", placeholder: "Confirm Password"%>
+          <p style = "color:red;"id = "errMsg"></p>
+          <%= form.submit "Renew Subscription", class: "form-control btn btn-success"%>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class = "row" style = "margin: 25px 25px 25px 25px">
+      <div class = "col-md-6">
+        <h2>You are currently subscribed!</h2>
+        <br>
+        <h4>List of Payments</h4>
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Date of Payment</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% subscriptions = Subscription.all.where("user_id = ?",session[:user_id])%>
+            <% subscriptions.each do |sub|%>
+              <tr>
+                <td><%= sub.dateOfPayment %></td>
+                <td><%= sub.payment %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class = "col-md-6">
+        <br>
+        <br>
+        <br>
+        <p style = "text-align:justify;">Your subscription will be automatically renewed on <strong><%= subscriptions.last.dateOfPayment + 30 %></strong>.</p>
+        <br>
+        <p style = "text-align:justify;">To unsubscribe, please input your password first then click the <strong>"Cancel Subscription"</strong> button below.</p>
+        <%= form_with url:"/cancel_subscription", method: :post do |form|%>
+          <%= form.hidden_field :user_id, :value => session[:user_id]%>
+          <%= form.password_field :confirm_password, class: "form-control", placeholder: "Confirm Password"%>
+          <p style = "color:red;"id = "errMsg"></p>
+          <%= form.submit "Cancel Subscription", class: "form-control btn btn-danger"%>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

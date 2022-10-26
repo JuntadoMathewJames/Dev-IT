@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_25_130901) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_26_094346) do
   create_table "expenses", force: :cascade do |t|
     t.text "description"
     t.decimal "amount"
@@ -83,6 +83,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_25_130901) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "unsubscriptionDate"
+    t.date "renewDate"
   end
 
 end
