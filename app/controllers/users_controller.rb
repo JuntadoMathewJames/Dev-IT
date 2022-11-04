@@ -59,7 +59,7 @@ class UsersController < ApplicationController
 
     def subscribe_proceed
         @subscription = Subscription.new
-        @point_of_sale = PointOfSale.new
+        @point_of_sale = PosTracker.new
         @subscription.user_id = params[:user_id]
         @subscription.payment = params[:payment]
         @subscription.dateOfPayment = params[:dateOfPayment]
@@ -70,7 +70,7 @@ class UsersController < ApplicationController
                 user.save
                 session[:user_status]= user.status
                 @subscription.save
-                @point_of_sale.subscription_id = @subscription.id
+                @point_of_sale.user_id = user.id
                 @point_of_sale.save
                 format.html{redirect_to "/pos"}
             else

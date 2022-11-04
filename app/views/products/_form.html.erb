@@ -1,37 +1,32 @@
-<%= form_with(model: product) do |form| %>
-  <% if product.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
-
-      <ul>
-        <% product.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<div style = "margin:25px 25px 25px 25px">
+<h3 style = "text-align:center;"><%= message %></h3>
+<br>
+  <%= form_with(model: product) do |form| %>
+    <div class ="row">
+      <div class = "col-md-3">
+        <label for = "productName">Product Name:</label>
+        <%= form.text_field :productName, class: "form-control" %>
+      </div>
+      <div class = "col-md-3">
+        <label for = "product_type">Product Type:</label>
+        <%= form.select(:product_type, ["Food","Beverage", "Medicine","Body Essential"], {include_blank: "Select Product Type"}, {class: "form-control"})%>
+      </div>
+      <div class = "col-md-3">
+        <label for = "quantity">Quantity:</label>
+        <%= form.number_field :quantity, class: "form-control", step: :any %>
+      </div>
+      <div class = "col-md-3">
+        <label for = "pricePerUnit">Price Per Unit</label>
+        <%= form.number_field :pricePerUnit,class: "form-control", step: :any %>
+      </div>
+    </div>
+    <br>
+    <div style = "margin-left: 40%; margin-right:40%;">
+      <%= form.submit "Save Product", class: "form-control btn btn-success" %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :pos_id, style: "display: block" %>
-    <%= form.number_field :pos_id %>
+  <br>
+  <div style = "margin-left: 40%; margin-right:40%;">
+    <a href= "/products"><button class = "form-control btn btn-danger">Cancel</button></a>
   </div>
-
-  <div>
-    <%= form.label :productName, style: "display: block" %>
-    <%= form.text_field :productName %>
-  </div>
-
-  <div>
-    <%= form.label :quantity, style: "display: block" %>
-    <%= form.text_field :quantity %>
-  </div>
-
-  <div>
-    <%= form.label :pricePerUnit, style: "display: block" %>
-    <%= form.text_field :pricePerUnit %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

@@ -5,7 +5,32 @@ class ProductsController < ApplicationController
  
   # GET /products or /products.json
   def index
-    @products = Product.all
+    @pos_id = PosTracker.find(session[:user_id])
+    @page = params.fetch(:page, 0).to_i
+    if @page < 0 
+      @page = 0
+    end
+    @products_per_page = 5
+    @products = Product.offset(@page * @products_per_page).limit(@products_per_page).order(:productName).order(:quantity).where(pos_id: @pos_id.id)
+  end
+
+  def search
+    @pos_id = PosTracker.find(session[:user_id])
+    search_type = params[:search_type].to_s
+    if search_type == "Product Name"
+      search_type = "productName"
+    elsif search_type== "Product Type"
+      search_type = "product_type"
+    end
+    @products = Product.where("#{search_type} LIKE ? ", "#{params[:search_value]}%").where(pos_id: @pos_id.id).order(:productName).order(:quantity)
+    respond_to do |format|
+      if @products.length > 0
+          format.turbo_stream{render turbo_stream: turbo_stream.update("products",partial: "products/search_results", locals:{products:@products })}
+      elsif @products.length <= 0
+          format.turbo_stream{render turbo_stream: turbo_stream.update("products","No Record/s Found")}
+      end
+    end
+
   end
 
   # GET /products/1 or /products/1.json
@@ -15,23 +40,29 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
+    respond_to do |format|
+      format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial:"/products/form", locals:{product: @product, message: "Adding New Product"})}
+    end
   end
 
   # GET /products/1/edit
   def edit
+    respond_to do |format|
+      format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial:"/products/form", locals:{product: @product, message: "Editing a Product"})}
+    end
+
   end
 
   # POST /products or /products.json
   def create
     @product = Product.new(product_params)
-
+    pos_id = PosTracker.find(session[:user_id])
+    @product.pos_id = pos_id.id
     respond_to do |format|
       if @product.save
-        format.html { redirect_to product_url(@product), notice: "Product was successfully created." }
-        format.json { render :show, status: :created, location: @product }
+        format.html { redirect_to "/products", notice: "Product was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        format.turbo_stream{render turbo_stream: turbo_stream.replace("errMsgArea",partial: "/layouts/errorMessage",locals:{entity: @product})}
       end
     end
   end
@@ -40,11 +71,10 @@ class ProductsController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(product_params)
-        format.html { redirect_to product_url(@product), notice: "Product was successfully updated." }
-        format.json { render :show, status: :ok, location: @product }
+        format.html { redirect_to "/products", notice: "Product was successfully updated." }
+       
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        format.turbo_stream{render turbo_stream: turbo_stream.replace("errMsgArea",partial: "/layouts/errorMessage",locals:{entity: @product})}
       end
     end
   end
@@ -67,6 +97,6 @@ class ProductsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.require(:product).permit(:pos_id, :productName, :quantity, :pricePerUnit)
+      params.require(:product).permit(:pos_id, :productName, :quantity, :pricePerUnit, :product_type)
     end
 end

@@ -1,4 +1,6 @@
-  <% if entity.errors.any? %>
+<div style = "margin: 25px 25px 25px 25px">
+<h3 style = "color:red;">Error!</h3>
+<% if entity.errors.any? %>
   <div style="color: red">
     <ul>
       <% entity.errors.each do |error| %>
@@ -7,3 +9,4 @@
     </ul>
   </div>
 <% end %>
+</div>

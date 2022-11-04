@@ -1,0 +1,32 @@
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Product Type</th>
+      <th>Quantity</th>
+      <th>Price Per Unit</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <%= render product %>
+        <td>
+          <div class = "row">
+            <div class = "col-md-6">
+              <%= form_with url:"/products/#{product.id}/edit", method: :post do |form|%>
+                <%= form.button nil, class: "form-control btn btn-warning" do %>
+                  <i class="fa-solid fa-pen-to-square"></i>
+                <% end %>
+              <% end %>
+            </div>
+            <div class = "col-md-6">
+              <%= link_to  "Delete", product, class:"btn btn-danger form-control", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_26_094346) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_04_082929) do
   create_table "expenses", charset: "utf8mb4", force: :cascade do |t|
     t.text "description"
     t.decimal "amount", precision: 10
@@ -35,8 +35,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_26_094346) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "point_of_sales", charset: "utf8mb4", force: :cascade do |t|
-    t.integer "subscription_id"
+  create_table "pos_trackers", charset: "utf8mb4", force: :cascade do |t|
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -48,6 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_26_094346) do
     t.decimal "pricePerUnit", precision: 10
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "product_type"
   end
 
   create_table "sales", charset: "utf8mb4", force: :cascade do |t|

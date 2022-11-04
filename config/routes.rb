@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   post "/renew_subscription",to:"users#renew_subscription"
   post "/change_password",to:"users#change_password"
   post "/change_password/proceed",to:"users#change_password_proceed"
+
+  post "/products/add",to:"products#new"
+  post "/products/:id/edit",to:"products#edit"
+  post "/products/search",to:"products#search"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
