@@ -1,6 +1,7 @@
 class Transaction < ApplicationRecord
     has_many :orders, :dependent => :destroy
     
-    validates :pos_id, :dateOfTransaction, :totalPrice, presence:true
-    validates :pos_id, :totalPrice, numericality:{greater_than:0}
+    validates :pos_id, :dateOfTransaction, presence:true
+    validates :pos_id, numericality:{greater_than:0}
+    validates :totalPrice, presence:true, numericality:{greater_than:0}, on: :update
 end

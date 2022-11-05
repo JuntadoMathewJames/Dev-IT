@@ -1,0 +1,33 @@
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Date of Transaction</th>
+      <th>Total Price</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.dateOfTransaction%></td>
+        <td><%= transaction.totalPrice%></td>
+         <td><%= transaction.status%></td>
+        <td>
+          <div class = "row">
+            <div class = "col-md-6">
+              <%= form_with url:"/transactions/#{transaction.id}/edit", method: :post do |form|%>
+                <%= form.button nil, class: "form-control btn btn-warning" do %>
+                  <i class="fa-solid fa-pen-to-square"></i>
+                <% end %>
+              <% end %>
+            </div>
+            <div class = "col-md-6">
+              <%# <%= link_to  "Delete", transaction, class:"btn btn-danger form-control", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %> %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

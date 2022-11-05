@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
  
   # GET /products or /products.json
   def index
-    @pos_id = PosTracker.find(session[:user_id])
+    @pos_id = PosTracker.find_by(user_id: session[:user_id])
     @page = params.fetch(:page, 0).to_i
     if @page < 0 
       @page = 0
@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
   end
 
   def search
-    @pos_id = PosTracker.find(session[:user_id])
+    @pos_id = PosTracker.find_by(user_id: session[:user_id])
     search_type = params[:search_type].to_s
     if search_type == "Product Name"
       search_type = "productName"
@@ -56,13 +56,13 @@ class ProductsController < ApplicationController
   # POST /products or /products.json
   def create
     @product = Product.new(product_params)
-    pos_id = PosTracker.find(session[:user_id])
-    @product.pos_id = pos_id.id
+    @pos_id = PosTracker.find_by(user_id: session[:user_id])
+    @product.pos_id = @pos_id.id
     respond_to do |format|
       if @product.save
         format.html { redirect_to "/products", notice: "Product was successfully created." }
       else
-        format.turbo_stream{render turbo_stream: turbo_stream.replace("errMsgArea",partial: "/layouts/errorMessage",locals:{entity: @product})}
+        format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial: "form",locals:{product: @product})}
       end
     end
   end
@@ -72,9 +72,8 @@ class ProductsController < ApplicationController
     respond_to do |format|
       if @product.update(product_params)
         format.html { redirect_to "/products", notice: "Product was successfully updated." }
-       
       else
-        format.turbo_stream{render turbo_stream: turbo_stream.replace("errMsgArea",partial: "/layouts/errorMessage",locals:{entity: @product})}
+        format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial: "form",locals:{product: @product})}
       end
     end
   end

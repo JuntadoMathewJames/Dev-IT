@@ -1,0 +1,29 @@
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Quantity</th>
+      <th>Price per Unit</th>
+      <th>Tentative Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% orders.each do |order| %>
+      <tr>
+        <% order_product = Product.find(order.product_id)%>
+        <td><%= order_product.productName %></td>
+        <td><%= order.quantity%></td>
+        <td><%= order_product.pricePerUnit %></td>
+        <td><%= order.price%></td>
+        <td>
+          <%= form_with url:"/transactions/order/#{order.id}/delete", method: :post do |form|%>
+            <%= form.button nil, class: "form-control btn btn-danger" do %>
+              <i class="fa-solid fa-trash"></i>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

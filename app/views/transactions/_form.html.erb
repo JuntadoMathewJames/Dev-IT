@@ -1,0 +1,48 @@
+<div style = "margin: 25px 25px 25px 25px">
+  <%= form_with url:"/transactions/order/save", method: :post, model: order do |form| %>
+    <% if order.id.present? %>
+      <%= form.hidden_field :order_id, :value => order.id %>
+    <% end %>
+    <div class ="row">
+      <div class = "col-md-4">
+        <label for = "dateOfTransaction">Date of Transaction: </label>
+        <%= form.date_field :displayDateOfTransaction, class: "form-control", :value => Date.today(), :disabled =>true%>
+      </div>
+      <% invalid_product = order.errors.include?(:product_id) %>
+      <div class = "col-md-4">
+        <label for = "product">Product: </label>
+        <%= form.collection_select :product_id , Product.all.where(pos_id: pos_id).where("quantity > ?",0).order(:productName), :id, :productName,{:prompt => "Select Product"},{class:"form-control #{'is-invalid' if invalid_product}"} %>
+        <% if invalid_product %>
+          <div class="invalid-feedback d-block">
+            <% order.errors.full_messages_for(:product_id).each do |error_message| %>
+              <%= error_message %>.
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <% invalid_quantity = order.errors.include?(:quantity) %>
+      <div class = "col-md-4">
+        <label for = "quantity">Quantity: </label>
+        <%= form.number_field :quantity, class: "form-control #{'is-invalid' if invalid_quantity}", step: :any %>
+        <% if invalid_quantity %>
+          <div class="invalid-feedback d-block">
+            <% order.errors.full_messages_for(:quantity).each do |error_message| %>
+              <%= error_message %>.
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <%= form.hidden_field :transaction_id, :value => transaction %>
+    <br>
+    <div style = "margin: 0 auto; width: 40%;">
+      <%= form.button nil, class: "form-control btn btn-success" do %>
+        Add to Cart <i class="fa-solid fa-cart-shopping"></i>
+      <% end %>
+    </div>
+  <% end %>
+  <br>
+  <div style = "margin: 0 auto; width: 40%;">
+    <a href= "/transactions"><button class = "btn btn-danger form-control">Cancel Transaction <i class="fa-solid fa-ban"></i></button></a>
+  </div>
+</div>

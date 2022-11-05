@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     before_action :set_current_url
 
     def index
-
+        @user = User.new
     end
 
     def logout
@@ -37,22 +37,23 @@ class UsersController < ApplicationController
 
     def register_proceed
         @user = User.new
-        @user.username = params[:register_username]
-        @user.password_digest = params[:password_digest]
+        @user.username = params[:user][:register_username]
+        puts @user.username
+        @user.password_digest = params[:user][:password_digest]
         @user.status = "UNSUBSCRIBED"
         respond_to do |format|
             if @user.valid?
-                if @user.password_digest == params[:confirm_password]
+                if @user.password_digest == params[:user][:confirm_password]
                     @user.password_digest = BCrypt::Password.create(@user.password_digest)
                     @user.save
                     session[:user_id] = @user.id
                     session[:user_status] = @user.status
                     format.html{redirect_to "/account_details/subscribe"}
                 else
-                    format.turbo_stream{render turbo_stream: turbo_stream.update("register_errorArea", "<p style = 'color:red;'><strong>Passwords did not match!</strong></p>")}
+                    format.turbo_stream{render turbo_stream: turbo_stream.update("registration_area", partial: "registration_form", locals:{user: @user, notice: "Password did not match!"})}
                 end
             else
-                format.turbo_stream{render turbo_stream: turbo_stream.update("register_errorArea",partial: "/layouts/errorMessage", locals:{entity: @user})}
+                format.turbo_stream{render turbo_stream: turbo_stream.update("registration_area", partial: "registration_form", locals:{user: @user, notice: ""})}
             end
         end
     end

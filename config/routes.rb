@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get "/account_details/:method",to:"general_features#account_details"
   get "/dashboard",to:"general_features#index"
   get "/pos",to:"general_features#pos"
+  get "/transactions",to:"transactions#index"
+  get "/transactions/new",to:"transactions#new"
 
   post "/register/proceed",to:"users#register_proceed"
   post "/login/proceed",to:"users#login_proceed"
@@ -18,6 +20,11 @@ Rails.application.routes.draw do
   post "/products/add",to:"products#new"
   post "/products/:id/edit",to:"products#edit"
   post "/products/search",to:"products#search"
+  
+
+  post "/transactions/search",to:"transactions#search"
+  post "/transactions/order/save", to:"transactions#save_order"
+  post "/transactions/order/:id/delete",to:"transactions#delete"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

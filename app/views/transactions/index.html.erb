@@ -24,10 +24,10 @@
     <div class = "col-md-10">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a href = "/transactions" style = "text-decoration:none"><button class = "nav-link">Transactions</button></a>
+          <a href = "/transactions" style = "text-decoration:none"><button class = "nav-link active">Transactions</button></a>
         </li>
         <li class="nav-item">
-          <a href = "/products" style = "text-decoration:none"><button class = "nav-link active">Products</button></a>
+          <a href = "/products" style = "text-decoration:none"><button class = "nav-link">Products</button></a>
         </li>
         <li class="nav-item">
           <a href = "/sales" style = "text-decoration:none"><button class = "nav-link">Sales</button></a>
@@ -35,21 +35,15 @@
       </ul>
     </div>
     <div class = "col-md-2">
-      <%= form_with url:"/products/add", method: :post do |form|%>
-        <%= form.button nil, class: "form-control btn btn-primary" do %>
-          Add Product <i class="fa-solid fa-plus"></i>
-        <% end %>
-      <% end %>
+      <a href = "/transactions/new"><button class = "btn btn-primary form-control">Add Transaction <i class="fa-solid fa-plus"></i></button></a>
     </div>
   </div>
   <div class="card" >
-    <div id="input_area" >
-    </div>
     <div style = "margin-left:25px; margin-right:25px; margin-top:25px;">
-      <%= form_with url: "/products/search", method: :post do |form| %>
+      <%= form_with url: "/transactions/search", method: :post do |form| %>
         <label for = "search_criteria"><strong>Search Criteria:</strong></label>
         <div class="input-group mb-3">
-          <%= form.select :search_type, options_for_select(["Product Name","Product Type"])%>
+          <%= form.select :search_type, options_for_select(["Date of Transaction"])%>
           <%= form.search_field :search_value , class: "form-control", placeholder: "Search a Material", oninput: "this.form.requestSubmit()" %>
         </div>
       <% end %>
@@ -58,18 +52,18 @@
     <div class="card-body" >
       <div class="card-deck">
         <div class="card shadow">
-          <div id="products">
-            <%= render "search_results", products: @products %>
+          <div id="transactions">
+            <%= render "search_results", transactions: @transactions %>
           </div>
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-left">
               <li class="page-item ">
                 <% if @page  > 0 %>
-                  <%= link_to "Previous Page", products_path(page: @page - 1), class:"page-link"%>
+                  <%= link_to "Previous Page", transactions_path(page: @page - 1), class:"page-link"%>
                 <% end %>
               </li>
               <li class="page-item">
-                <%= link_to "Next Page", products_path(page: @page + 1), class:"page-link"%>
+                <%= link_to "Next Page", transactions_path(page: @page + 1), class:"page-link"%>
               </li>
             </ul>
           </nav>
