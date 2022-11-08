@@ -1,0 +1,31 @@
+<div style = "margin: 25px 25px 25px 25px">
+  <%= form_with url:"/sales/proceed", method: :post, model: sale do |form|%>
+    <div class = "row">
+      <div class = "col-md-4">
+        <%= form.hidden_field :dateOfSales, :value => Date.today() %>
+        <label for = "dateOfSales">Date of Sales: </label>
+        <%= form.text_field :displayDateOfSales, :value => Date.today(), :disabled => true, class:"form-control" %>
+      </div>
+      <% invalid_beginningBalance = sale.errors.include?(:beginningBalance) %>
+      <div class = "col-md-4">
+        <label for = "beginningBalance">Beginning Balance: </label>
+        <%= form.number_field :beginningBalance, class:"form-control #{'is-invalid' if invalid_beginningBalance}", step: :any %>
+        <% if invalid_beginningBalance %>
+          <div class="invalid-feedback d-block">
+            <% sale.errors.full_messages_for(:beginningBalance).each do |error_message| %>
+              <%= error_message %>.
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div class = "col-md-4">
+        <label for = "remarks">Remarks: </label>
+        <%= form.text_field :remarks, class:"form-control" %>
+      </div>
+    </div>
+    <br>
+    <div style = "margin: 0 auto; width: 40%;">
+      <%= form.submit "Proceed", class:"btn btn-success form-control"%>
+    </div>
+  <% end %>
+</div>

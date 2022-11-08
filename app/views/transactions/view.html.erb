@@ -1,0 +1,80 @@
+ <!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container px-lg-5">
+    <a class="navbar-brand" href = "/dashboard">BTAIMS</a>
+    <% user = User.find(session[:user_id])%>
+    <a href = "#" style = "color:white; text-decoration:none;">Hi <%= user.username.upcase%>!</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item "><a class="nav-link" aria-current="page" href="/dashboard">Home</a></li>
+        <% if session[:user_status] == "SUBSCRIBED"%>
+          <li class="nav-item"><a class="nav-link active " aria-current="page" href="/pos">POS</a></li>
+        <% end %>
+        <li class="nav-item"><a class="nav-link" href="/account_details/profile">Account Details</a></li>
+      </ul>
+      <ul class="form-inline my-2 my-lg-0">
+        <li class="nav-item "><a class="nav-link" aria-current="page" href="/logout" style = "color:red;">LOGOUT</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div style="overflow-x:hidden; margin: 25px 25px 25px 25px;" class="text-xs-center" >
+  <div class="card" >
+    <div class="card-body" >
+      <div class="card-deck">
+        <div class="card shadow">
+          <div id = "orders" style = "margin: 25px 25px 25px 25px">
+            <div class = "row">
+              <div class = "col-md-9">
+                <p><strong>Date of Transaction: </strong><%= @transaction.dateOfTransaction%></p>
+              </div>
+              <div class = "col-md-3">
+                <a href = "/transactions"><button class = "btn btn-primary form-control">Back to Transactions</button></a>
+              </div>
+            </div>
+            <p><strong>Total Price: </strong><%= @transaction.totalPrice%></p>
+            <p><strong>Status: </strong><%= @transaction.status%></p>
+            <h3 style = "text-align:center">List of Orders</h3>
+            <br>
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Quantity</th>
+                  <th>Price Per Unit</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @orders.each do |order| %>
+                  <tr>
+                    <% product = Product.find(order.product_id)%>
+                    <td><%= product.productName %></td>
+                    <td><%= order.quantity%></td>
+                    <td><%=product.pricePerUnit%></td>
+                    <td><%= order.price%></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <% if @order_count > 5%>
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-left">
+                  <li class="page-item ">
+                    <% if @page  > 0 %>
+                      <%= link_to "Previous Page", "/transactions/#{@transaction.id}/view?page=#{@page-1}", class:"page-link"%>
+                    <% end %>
+                  </li>
+                  <li class="page-item">
+                    <%= link_to "Next Page","/transactions/#{@transaction.id}/view?page=#{@page + 1}", class:"page-link"%>
+                  </li>
+                </ul>
+              </nav>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

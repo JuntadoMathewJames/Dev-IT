@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_05_100254) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_07_090506) do
   create_table "expenses", charset: "utf8mb4", force: :cascade do |t|
     t.text "description"
     t.decimal "amount", precision: 10
     t.date "dateOfExpense"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "pos_id"
   end
 
   create_table "orders", charset: "utf8mb4", force: :cascade do |t|
@@ -33,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_05_100254) do
     t.decimal "amount", precision: 10
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "pos_id"
   end
 
   create_table "pos_trackers", charset: "utf8mb4", force: :cascade do |t|

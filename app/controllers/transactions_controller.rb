@@ -6,11 +6,14 @@ class TransactionsController < ApplicationController
         deleteUnfinishedTransactions
         @pos_id = PosTracker.find_by(user_id: session[:user_id])
         @page = params.fetch(:page, 0).to_i
-        if @page < 0 
-          @page = 0
+        if  @page < 0 
+        @page = 0
         end
+        @transactions = Transaction.all.where("pos_id = ?", @pos_id.id).where(status: "PAID")
+        @transaction_count = @transactions.length()
         @transactions_per_page = 5
         @transactions = Transaction.offset(@page * @transactions_per_page).limit(@transactions_per_page).order(:dateOfTransaction).where(pos_id: @pos_id.id).where(status: "PAID")
+       
     end
 
     def search
@@ -39,6 +42,19 @@ class TransactionsController < ApplicationController
          
     end
 
+    def view
+        @transaction = Transaction.find(params[:id])
+        @orders = Order.all.where("transaction_id = ?",@transaction.id)
+        @order_count = @orders.length()
+        @page = params.fetch(:page, 0).to_i
+        if @page < 0 
+        @page = 0
+        end
+        @orders_per_page = 5
+        @orders = Order.offset(@page * @orders_per_page).limit(@orders_per_page).where(transaction_id: @transaction.id)
+      
+    end
+
     def save_order
         pos_id = PosTracker.find_by(user_id: session[:user_id])
         order = nil
@@ -60,7 +76,7 @@ class TransactionsController < ApplicationController
                 product.save
                 order.save
                 orders = Order.all.where(transaction_id: params[:order][:transaction_id])
-                format.turbo_stream{render turbo_stream: turbo_stream.update("cart", partial: "cart", locals:{orders: orders})}
+                format.turbo_stream{render turbo_stream: turbo_stream.update("cart", partial: "cart", locals:{orders: orders,transaction_id: order.transaction_id})}
             else
                 format.turbo_stream{render turbo_stream: turbo_stream.update("transactions", partial: "form", locals:{transaction: params[:order][:transaction_id] ,pos_id: pos_id.id, order: order })}
                
@@ -69,7 +85,45 @@ class TransactionsController < ApplicationController
     end
 
 
-    def delete
+    def create
+        transaction = Transaction.find(params[:transaction_id])
+        respond_to do |format|
+            if transaction.totalPrice.present?
+                transaction.status = "PAID"
+                transaction.save
+                payment = Payment.new
+                payment.dateOfPayment = Date.today()
+                payment.amount = transaction.totalPrice
+                payment.pos_id = transaction.pos_id
+                payment.save
+                format.html{redirect_to "/transactions"}
+            else
+                format.turbo_stream{render turbo_stream: turbo_stream.update("errMsg","Transaction is not yet paid.")}
+            end
+        end
+    end
+
+
+    def payment
+        transaction = Transaction.find(params[:transaction_id])
+        respond_to do |format|
+            if params[:payment].to_i >= params[:totalPrice].to_i
+                transaction.totalPrice = params[:totalPrice]
+                transaction.save
+                change_value = params[:payment].to_i - params[:totalPrice].to_i 
+                format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<input type='number' id = 'change' name = 'change' class = 'form-control' disabled = 'disabled' value = #{change_value}>")}
+            elsif params[:payment].to_i < params[:totalPrice].to_i
+                transaction.totalPrice = nil
+                transaction.save
+                format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<p style = 'color:red'>Payment must be greater than or equals Total Price.</p>")}
+            elsif params[:payment] == nil || params[:payment] == ""
+                format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<input type='number' id = 'change' name = 'change' class = 'form-control' disabled = 'disabled'")}
+            end
+        end
+    end
+
+
+    def delete #delete order
         order = Order.find(params[:id])
         transaction = Transaction.find(order.transaction_id)
         product = Product.find(order.product_id)
@@ -80,6 +134,12 @@ class TransactionsController < ApplicationController
             orders = Order.all.where("transaction_id = ?",transaction.id)
             format.turbo_stream{render turbo_stream: turbo_stream.update("cart", partial: "cart", locals:{orders: orders})}
         end
+    end
+
+    def destroy #delete transaction
+        transaction = Transaction.find(params[:id])
+        transaction.destroy
+        redirect_to "/transactions"
     end
 
     private

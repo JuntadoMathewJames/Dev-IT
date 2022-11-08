@@ -6,12 +6,14 @@ class ProductsController < ApplicationController
   # GET /products or /products.json
   def index
     @pos_id = PosTracker.find_by(user_id: session[:user_id])
+    @products = Product.all.where("pos_id = ?", @pos_id.id).order(:quantity)
+    @product_count = @products.length()
     @page = params.fetch(:page, 0).to_i
     if @page < 0 
       @page = 0
     end
     @products_per_page = 5
-    @products = Product.offset(@page * @products_per_page).limit(@products_per_page).order(:productName).order(:quantity).where(pos_id: @pos_id.id)
+    @products = Product.offset(@page * @products_per_page).limit(@products_per_page).order(:quantity).where(pos_id: @pos_id.id)
   end
 
   def search

@@ -1,0 +1,34 @@
+<div style = "margin: 25px 25px 25px 25px">
+  <%= form_with url:"/sales/#{sale.id}/expenses/save", method: :post, model: expense do |form| %>
+    <div class = "row">
+      <div class = "col-md-4">
+        <% invalid_description = expense.errors.include?(:description) %>
+        <label for = "description">Expense Description: </label>
+        <%= form.text_field :description, class: "form-control #{'is-invalid' if invalid_description}" %>
+        <% if invalid_description %>
+          <div class="invalid-feedback d-block">
+            <% expense.errors.full_messages_for(:description).each do |error_message| %>
+              <%= error_message %>.
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div class = "col-md-4">
+        <% invalid_amount = expense.errors.include?(:amount) %>
+        <label for = "amount">Amount: </label>
+        <%= form.number_field :amount, class: "form-control  #{'is-invalid' if invalid_amount}", step: :any %>
+        <% if invalid_amount %>
+          <div class="invalid-feedback d-block">
+            <% expense.errors.full_messages_for(:amount).each do |error_message| %>
+              <%= error_message %>.
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div class = "col-md-4">
+        <label for = "add Expense button"> </label>
+        <%= form.submit "Add Expense", class: "btn btn-primary form-control"%>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -12,18 +12,14 @@
       <tr>
         <td><%= transaction.dateOfTransaction%></td>
         <td><%= transaction.totalPrice%></td>
-         <td><%= transaction.status%></td>
+        <td><%= transaction.status%></td>
         <td>
           <div class = "row">
             <div class = "col-md-6">
-              <%= form_with url:"/transactions/#{transaction.id}/edit", method: :post do |form|%>
-                <%= form.button nil, class: "form-control btn btn-warning" do %>
-                  <i class="fa-solid fa-pen-to-square"></i>
-                <% end %>
-              <% end %>
+              <a href = "/transactions/<%=transaction.id%>/view"><button class = "form-control btn btn-info">View</button></a>
             </div>
             <div class = "col-md-6">
-              <%# <%= link_to  "Delete", transaction, class:"btn btn-danger form-control", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %> %>
+              <%= link_to  "Delete", "/transactions/#{transaction.id}/destroy", class:"btn btn-danger form-control", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
             </div>
           </div>
         </td>

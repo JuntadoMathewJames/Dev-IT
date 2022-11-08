@@ -55,18 +55,20 @@
           <div id="transactions">
             <%= render "search_results", transactions: @transactions %>
           </div>
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-left">
-              <li class="page-item ">
-                <% if @page  > 0 %>
-                  <%= link_to "Previous Page", transactions_path(page: @page - 1), class:"page-link"%>
-                <% end %>
-              </li>
-              <li class="page-item">
-                <%= link_to "Next Page", transactions_path(page: @page + 1), class:"page-link"%>
-              </li>
-            </ul>
-          </nav>
+          <% if @transaction_count > 5%>
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-left">
+                <li class="page-item ">
+                  <% if @page  > 0 %>
+                    <%= link_to "Previous Page", transactions_path(page: @page - 1), class:"page-link"%>
+                  <% end %>
+                </li>
+                <li class="page-item">
+                  <%= link_to "Next Page", transactions_path(page: @page + 1), class:"page-link"%>
+                </li>
+              </ul>
+            </nav>
+          <% end %>
         </div>
       </div>
     </div>

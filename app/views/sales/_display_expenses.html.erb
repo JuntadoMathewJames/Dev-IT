@@ -1,0 +1,23 @@
+<p><strong>Date of Expense: </strong><%= expenseDate %></p>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Amount</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% expenses.each do |expense| %>
+      <tr>
+        <td><%= expense.description%></td>
+        <td><%= expense.amount%></td>
+        <td>
+          <div class = "row">
+            <%= link_to  "Delete", "/sales/expense/#{sale.id}/#{expense.id}/destroy", class:"btn btn-danger form-control", data: { turbo_method: :delete} %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

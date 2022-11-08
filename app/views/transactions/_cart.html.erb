@@ -27,3 +27,32 @@
     <% end %>
   </tbody>
 </table>
+<div style = "margin: 25px 25px 25px 25px">
+  <%= form_with url:"/transactions/payment", method: :post do |form|%>
+    <div class = "row">
+      <div class = "col-md-4">
+        <%= form.hidden_field :transaction_id , :value => transaction_id %>
+        <%= form.hidden_field :totalPrice , :value => orders.sum(:price) %>
+        <label for = "totalPrice">Total Price: </label>
+        <%= form.number_field :displayTotalPrice, class: "form-control",:value => orders.sum(:price), :disabled => true %>
+      </div>
+      <div class = "col-md-4">
+        <label for = "payment">Payment: </label>
+        <%= form.number_field :payment, class: "form-control", step: :any,oninput: "this.form.requestSubmit()" %>
+      </div>
+      <div class = "col-md-4">
+        <label for = "change">Change: </label>
+        <div id = "change_field">
+          <%= form.number_field :change, class: "form-control", step: :any, :disabled => true %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div style = "margin: 0 auto; width: 30%;">
+  <%= form_with url: "/transactions/save", method: :post do |form|%>
+     <%= form.hidden_field :transaction_id , :value => transaction_id %>
+    <%= form.submit "Check Out", class: "btn btn-success form-control" %>
+    <p id = "errMsg" style = "color:red"></p>
+  <% end %>
+</div>

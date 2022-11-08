@@ -1,0 +1,134 @@
+ <!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container px-lg-5">
+    <a class="navbar-brand" href = "/dashboard">BTAIMS</a>
+    <% user = User.find(session[:user_id])%>
+    <a href = "#" style = "color:white; text-decoration:none;">Hi <%= user.username.upcase%>!</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item "><a class="nav-link" aria-current="page" href="/dashboard">Home</a></li>
+        <% if session[:user_status] == "SUBSCRIBED"%>
+          <li class="nav-item"><a class="nav-link active " aria-current="page" href="/pos">POS</a></li>
+        <% end %>
+        <li class="nav-item"><a class="nav-link" href="/account_details/profile">Account Details</a></li>
+      </ul>
+      <ul class="form-inline my-2 my-lg-0">
+        <li class="nav-item "><a class="nav-link" aria-current="page" href="/logout" style = "color:red;">LOGOUT</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div style="overflow-x:hidden; margin: 25px 25px 25px 25px;" class="text-xs-center" >
+  <div class="card" >
+    <div class="card-body" >
+      <div class="card-deck">
+        <div class="card shadow">
+          <div id="view_sale" style = "margin: 25px 25px 25px 25px">
+            <div class = "row">
+              <div class = "col-md-10">
+                <h4>Sales Record</h4>
+              </div>
+              <div class = "col-md-2">
+                <a href = "/sales"><button class = "form-control btn btn-primary">Back to Sales</button></a>
+              </div>
+            </div>
+            <br>
+            <div class = "row">
+              <div class = "col-md-4">
+                <p><strong>Date generated: </strong><%= @sale.dateOfSales%></p>
+              </div>
+              <div class = "col-md-4">
+                <p><strong>Beginning Balance: </strong><%= @sale.beginningBalance%></p>
+              </div>
+              <div class = "col-md-4">
+                <p><strong>Remarks: </strong><%= @sale.remarks%></p>
+              </div>
+            </div>
+            <div class = "row">
+              <div class = "col-md-4">
+                <p><strong>Net Sales: </strong><%= @sale.netSales%></p>
+              </div>
+              <div class = "col-md-4">
+                <p><strong>Gross Sales: </strong><%= @sale.grossSales%></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class = "row">
+  <div class = "col-md-6">
+    <div style="overflow-x:hidden; margin: 25px 25px 25px 25px;" class="text-xs-center" >
+      <div class="card" >
+        <div class="card-body" >
+          <div class="card-deck">
+            <div class="card shadow">
+              <div id="view_payments" style = "margin: 25px 25px 25px 25px">
+                <h4 style = "text-align:center;">List of Payments Received</h4>
+                <table class="table table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @payments.each do |payment| %>
+                      <tr>
+                        <td><%= payment.amount%></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td><strong>Total Payments: <%=@payments.sum(:amount)%></strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class = "col-md-6">
+    <div style="overflow-x:hidden; margin: 25px 25px 25px 25px;" class="text-xs-center" >
+      <div class="card" >
+        <div class="card-body" >
+          <div class="card-deck">
+            <div class="card shadow">
+              <div id="view_expenses" style = "margin: 25px 25px 25px 25px">
+                <h4 style = "text-align:center;">List of Expenses Incurred</h4>
+                <table class="table table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Description</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @expenses.each do |expense| %>
+                      <tr>
+                        <td><%= expense.description%></td>
+                        <td><%= expense.amount%></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td><strong>Total Expenses:</strong> </td>
+                      <td><strong><%= @expenses.sum(:amount)%></strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
