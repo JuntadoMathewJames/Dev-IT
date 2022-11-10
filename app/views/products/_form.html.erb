@@ -1,6 +1,7 @@
 <div style = "margin:25px 25px 25px 25px">
   <br>
   <%= form_with(model: product) do |form| %>
+  <h3 style = "text-align:center;"><%= message%></h3>
     <div class ="row">
       <% invalid_productName = product.errors.include?(:productName) %>
       <div class = "col-md-3">

@@ -42,11 +42,16 @@ class SalesController < ApplicationController
         sale.dateOfSales = params[:sale][:dateOfSales]
         sale.beginningBalance = params[:sale][:beginningBalance]
         sale.remarks = params[:sale][:remarks]
+        payments = Payment.all.where("dateOfPayment =? ", sale.dateOfSales).where("pos_id = ?", pos_id.id)
         respond_to do |format|
-            if sale.save
-                format.html{redirect_to "/sales/#{sale.id}/add_expenses"}
+            if payments.length() > 0
+                if sale.save
+                    format.html{redirect_to "/sales/#{sale.id}/add_expenses"}
+                else
+                    format.turbo_stream{render turbo_stream: turbo_stream.update("sale_input_area", partial: "sales/form", locals:{sale: sale})}
+                end
             else
-                format.turbo_stream{render turbo_stream: turbo_stream.update("sale_input_area", partial: "sales/form", locals:{sale: sale})}
+                format.turbo_stream{render turbo_stream: turbo_stream.update("errMsg", "Cannot generate a sales record. No Payments have been received on #{sale.dateOfSales}.")}
             end
 
         end

@@ -1,0 +1,105 @@
+<div style="overflow-x:hidden; margin: 25px 25px 25px 25px;" >
+  <div class="card" >
+    <div class="card-body">
+      <div class="card-deck">
+        <div class="card shadow">
+          <div style = "margin: 25px 25px 25px 25px">
+            <h3 style = "text-align:center;"> Transaction Statistics</h3>
+            <div class = "row">
+              <div class = "col-md-3">
+                <p><strong>Overall number of Transactions made: </strong><%= @transactions.length()%></p>
+              </div>
+              <div class = "col-md-3">
+                <% sum = 0%>
+                <% counter = 0%>
+                <% @transactions.select(:dateOfTransaction).distinct.each do |transaction|%>
+                  <% sum += Transaction.all.where(pos_id: @pos_id.id).where(dateOfTransaction: transaction.dateOfTransaction).length() %>
+                  <% counter += 1 %>
+                <% end %>
+                <p><strong>Average Transaction per day: </strong><%= sum/counter%></p>
+              </div>
+              <div class = "col-md-3">
+                <p><strong>Average Price of Transaction: </strong><%= @transactions.average(:totalPrice) %></p>
+              </div>
+              <div class = "col-md-3">
+                <% counter = 0%>
+                <% sum = 0%>
+                <% @transactions.each do |transaction|%>
+                  <% orders = Order.all.where(transaction_id: transaction.id) %>
+                  <% sum += orders.length() %>
+                  <% counter += 1%>
+                <% end %>
+                <p><strong>Average number of type of items per Transaction: </strong><%= sum/counter%></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="card" >
+    <div class="card-body">
+      <div class="card-deck">
+        <div class="card shadow">
+          <div style = "margin: 25px 25px 25px 25px">
+            <h3 style = "text-align:center;"> Products Statistics</h3>
+            <div class = "row">
+              <div class = "col-md-3">
+                <p><strong>Total Number of Products in Inventory: </strong><%= @products.length()%></p>
+              </div>
+              <div class = "col-md-3">
+                <p><strong>Total Number of Beverage Products in Inventory: </strong><%= @products.all.where(product_type: "Beverage").length()%></p>
+              </div>
+              <div class = "col-md-3">
+                <p><strong>Total Number of Food Products in Inventory: </strong><%= @products.all.where(product_type: "Food").length()%></p>
+              </div>
+              <div class = "col-md-3">
+                <p><strong>Total Number of Medicine Products in Inventory: </strong><%= @products.all.where(product_type: "Medicine").length()%></p>
+              </div>
+              <div class = "col-md-3">
+                <p><strong>Total Number of Body Essential Products in Inventory: </strong><%= @products.all.where(product_type: "Body Essential").length()%></p>
+              </div>
+            </div>
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Quantity Sold</th>
+                </thead>
+                <tbody>
+                  <% @products.each do |product|%>
+                    <% count = 0 %>
+                    <tr>
+                      <td><%= product.productName%></td>
+                      <% @transactions.each do |transaction| %>
+                        <% orders = Order.all.where(transaction_id: transaction.id)%>
+                        <% orders.each do |order|%>
+                          <% if order.product_id == product.id %>
+                            <% count += order.quantity%>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                      <td><%= count%></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="card" >
+      <div class="card-body">
+        <div class="card-deck">
+          <div class="card shadow">
+            <div style = "margin: 25px 25px 25px 25px">
+              <h3 style = "text-align:center;"> Sales Statistics</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

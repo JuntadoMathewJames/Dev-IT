@@ -35,15 +35,7 @@
       </ul>
     </div>
     <div class = "col-md-3">
-      <% if isPaymentPresent %>
-        <% if isSaleRecordDuplicate %>
-          <p style = "color:red;">There is already a sales record generated for today.</p>
-        <% else%>
-          <a href = "/sales/new"><button class = "btn btn-primary form-control">Generate Sale <i class="fa-solid fa-plus"></i></button></a>
-        <% end %>
-      <% else %>
-        <p style = "color:red;">Cannot generate a sales record. No payments have been made today.</p>
-      <% end %>
+      <a href = "/sales/new"><button class = "btn btn-primary form-control">Generate Sale <i class="fa-solid fa-plus"></i></button></a>
     </div>
   </div>
   <div class="card" >
