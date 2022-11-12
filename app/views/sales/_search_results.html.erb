@@ -1,6 +1,6 @@
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered" >
   <thead>
-    <tr>
+    <tr class = "table-active">
       <th>Date of Sales</th>
       <th>Beginning Balance</th>
       <th>Remarks</th>
@@ -9,14 +9,14 @@
   </thead>
   <tbody>
     <% @sales.each do |sale| %>
-      <tr>
+      <tr >
         <td><%= sale.dateOfSales%></td>
         <td><%= sale.beginningBalance%></td>
         <td><%= sale.remarks %></td>
         <td>
           <div class = "row">
             <div class = "col-md-6">
-              <a href = "/sales/<%=sale.id%>/view"><button class = "form-control btn btn-info">View</button></a>
+              <a href = "/sales/<%=sale.id%>/view"><button class = "form-control btn btn-info"><i class="fa-solid fa-eye"></i></button></a>
             </div>
             <div class = "col-md-6">
               <%= link_to  "Delete", "/sales/#{sale.id}/destroy", class:"btn btn-danger form-control", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>

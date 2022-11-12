@@ -12,7 +12,7 @@
           <li class="nav-item"><a class="nav-link active " aria-current="page" href="/pos">POS</a></li>
         <% end %>
         <li class="nav-item"><a class="nav-link" href="/account_details/profile">Account Details</a></li>
-      </ul>
+      </ul> 
       <ul class="form-inline my-2 my-lg-0">
         <li class="nav-item "><a class="nav-link" aria-current="page" href="/logout" style = "color:red;">LOGOUT</a></li>
       </ul>
@@ -58,7 +58,7 @@
     <div class="card-body" >
       <div class="card-deck">
         <div class="card shadow">
-          <div id="products">
+          <div id="products" class = "table-responsive" >
             <%= render "search_results", products: @products %>
           </div>
           <% if @product_count> 5 %>

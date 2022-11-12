@@ -11,7 +11,7 @@ class SalesController < ApplicationController
         end
         @sale_count = @sales.length()
         @sales_per_page = 5
-        @sales = Sale.offset(@page * @sales_per_page).limit(@sales_per_page).order(:dateOfSales).where(pos_id: @pos_id.id)
+        @sales = Sale.offset(@page * @sales_per_page).limit(@sales_per_page).where(pos_id: @pos_id.id)
         
     end
 
@@ -19,7 +19,7 @@ class SalesController < ApplicationController
         @pos_id = PosTracker.find_by(user_id: session[:user_id])
         search_type = params[:search_type].to_s
         search_type = "dateOfSales"
-        @sales = Sale.where("#{search_type} LIKE ? ", "#{params[:search_value]}%").where(pos_id: @pos_id.id).order(:dateOfSales)
+        @sales = Sale.where("#{search_type} LIKE ? ", "#{params[:search_value]}%").where(pos_id: @pos_id.id)
         respond_to do |format|
           if @sales.length > 0
               format.turbo_stream{render turbo_stream: turbo_stream.update("sales",partial: "sales/search_results", locals:{sales:@sales })}

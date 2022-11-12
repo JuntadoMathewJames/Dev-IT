@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_07_090506) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_12_155636) do
   create_table "expenses", charset: "utf8mb4", force: :cascade do |t|
     t.text "description"
     t.decimal "amount", precision: 10
@@ -51,6 +51,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_07_090506) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "product_type"
+    t.integer "sell_count"
+    t.decimal "retail_price", precision: 10
   end
 
   create_table "sales", charset: "utf8mb4", force: :cascade do |t|

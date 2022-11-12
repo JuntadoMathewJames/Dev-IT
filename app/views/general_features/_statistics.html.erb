@@ -2,9 +2,9 @@
   <div class="card" >
     <div class="card-body">
       <div class="card-deck">
-        <div class="card shadow">
-          <div style = "margin: 25px 25px 25px 25px">
-            <h3 style = "text-align:center;"> Transaction Statistics</h3>
+        <div style = "margin: 25px 25px 25px 25px">
+          <h3 style = "text-align:center;"> Transaction Statistics</h3>
+          <% if @transactions.length() > 0%>
             <div class = "row">
               <div class = "col-md-3">
                 <p><strong>Overall number of Transactions made: </strong><%= @transactions.length()%></p>
@@ -12,7 +12,7 @@
               <div class = "col-md-3">
                 <% sum = 0%>
                 <% counter = 0%>
-                <% @transactions.select(:dateOfTransaction).distinct.each do |transaction|%>
+                <% @transactions.group(:dateOfTransaction).each do |transaction|%>
                   <% sum += Transaction.all.where(pos_id: @pos_id.id).where(dateOfTransaction: transaction.dateOfTransaction).length() %>
                   <% counter += 1 %>
                 <% end %>
@@ -32,7 +32,88 @@
                 <p><strong>Average number of type of items per Transaction: </strong><%= sum/counter%></p>
               </div>
             </div>
-          </div>
+          <% else%>
+            <h5 style = "text-align:center;">NO DATA</h5>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="card">
+    <div class="card-body">
+      <div class="card-deck">
+        <div style = "margin: 25px 25px 25px 25px">
+          <h3 style = "text-align:center;"> Products Statistics</h3>
+          <% if @products.length() > 0%>
+            <p><strong>Total Number of Products in Inventory: </strong><%= @products.length()%></p>
+            <h5 style = "text-align:center;">Pie Chart for Number of Products per Product Type</h5>
+            <%= pie_chart @products.group(:product_type).count %>
+            <br>
+            <h5 style = "text-align:center;">Top 10 Products Sold</h5>
+            <div class= "table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr class = "table-active">
+                    <th>Product Name</th>
+                    <th>Sold Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @products.order(sell_count: :desc).limit(10).each do |product| %>
+                    <tr>
+                      <% if product.sell_count != nil %>
+                        <td><%= product.productName%></td>
+                        <td><%= product.sell_count%></td>
+                      <% end %>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            <br>
+            <h5 style = "text-align:center;">Products with Low Sold Count</h5>
+            <div class= "table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr class = "table-active">
+                    <th>Product Name</th>
+                    <th>Sold Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @products.order(:sell_count).limit(10).each do |product| %>
+                    <tr>
+                      <td><%= product.productName%></td>
+                      <td><%= product.sell_count%></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            <br>
+            <h5 style = "text-align:center;">Products with Low Stocks</h5>
+            <div class= "table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr class = "table-active">
+                    <th>Product Name</th>
+                    <th>Stocks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @products.where("quantity <= ?", 10).order(:productName).each do |product| %>
+                    <tr>
+                      <td><%= product.productName%></td>
+                      <td><%= product.quantity%></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <h5 style = "text-align:center;">NO DATA</h5>
+          <% end %>
         </div>
       </div>
     </div>
@@ -41,65 +122,45 @@
   <div class="card" >
     <div class="card-body">
       <div class="card-deck">
-        <div class="card shadow">
-          <div style = "margin: 25px 25px 25px 25px">
-            <h3 style = "text-align:center;"> Products Statistics</h3>
+        <div style = "margin: 25px 25px 25px 25px">
+          <h3 style = "text-align:center;"> Sales Statistics</h3>
+          <% if @sales.length() > 0%>
             <div class = "row">
               <div class = "col-md-3">
-                <p><strong>Total Number of Products in Inventory: </strong><%= @products.length()%></p>
+                <p><strong>Total Number of Sales Record: </strong><%= @sales.length %></p>
               </div>
               <div class = "col-md-3">
-                <p><strong>Total Number of Beverage Products in Inventory: </strong><%= @products.all.where(product_type: "Beverage").length()%></p>
+                <p><strong>Average Gross Sales: </strong><%= @sales.average(:grossSales) %></p>
               </div>
               <div class = "col-md-3">
-                <p><strong>Total Number of Food Products in Inventory: </strong><%= @products.all.where(product_type: "Food").length()%></p>
+                <p><strong>Average Net Sales: </strong><%= @sales.average(:netSales)%></p>
               </div>
               <div class = "col-md-3">
-                <p><strong>Total Number of Medicine Products in Inventory: </strong><%= @products.all.where(product_type: "Medicine").length()%></p>
+                <% sum = 0%>
+                <% counter = 0%>
+                <% @payments.group(:dateOfPayment).each do |payment|%>
+                  <% daily_payments = Payment.all.where("dateOfPayment = ?",payment.dateOfPayment).where("pos_id =?",payment.pos_id)%>
+                  <% sum += daily_payments.average(:amount)%>
+                  <% counter += 1%>
+                <% end %>
+                <p><strong>Average Daily Payments: </strong><%=sum/counter%></p>
               </div>
               <div class = "col-md-3">
-                <p><strong>Total Number of Body Essential Products in Inventory: </strong><%= @products.all.where(product_type: "Body Essential").length()%></p>
+                <% sum = 0%>
+                <% counter = 0%>
+                <% @expenses.group(:dateOfExpense).each do |expense|%>
+                  <% daily_expenses = Expense.all.where("dateOfExpense = ?",expense.dateOfExpense).where("pos_id =?",expense.pos_id)%>
+                  <% sum += daily_expenses.average(:amount)%>
+                  <% counter += 1%>
+                <% end %>
+                <p><strong>Average Daily Expenses: </strong><%= sum/counter %></p>
               </div>
             </div>
-            <table class="table table-hover table-bordered">
-              <thead>
-                <tr>
-                  <th>Product Name</th>
-                  <th>Quantity Sold</th>
-                </thead>
-                <tbody>
-                  <% @products.each do |product|%>
-                    <% count = 0 %>
-                    <tr>
-                      <td><%= product.productName%></td>
-                      <% @transactions.each do |transaction| %>
-                        <% orders = Order.all.where(transaction_id: transaction.id)%>
-                        <% orders.each do |order|%>
-                          <% if order.product_id == product.id %>
-                            <% count += order.quantity%>
-                          <% end %>
-                        <% end %>
-                      <% end %>
-                      <td><%= count%></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <br>
-    <div class="card" >
-      <div class="card-body">
-        <div class="card-deck">
-          <div class="card shadow">
-            <div style = "margin: 25px 25px 25px 25px">
-              <h3 style = "text-align:center;"> Sales Statistics</h3>
-            </div>
-          </div>
+          <% else %>
+            <h5 style = "text-align:center;">NO DATA</h5>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
+</div>

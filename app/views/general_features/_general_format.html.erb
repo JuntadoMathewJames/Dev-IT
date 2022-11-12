@@ -8,9 +8,11 @@
         <li class="nav-item" >
           <a href = "/account_details/subscribe " style = "text-decoration:none;"><button class = "nav-link" >Subscription</button></a>
         </li>
-        <li class="nav-item" >
-          <a href = "/account_details/statistics" style = "text-decoration:none;"><button class = "nav-link" >Statistics</button></a>
-        </li>
+        <% if session[:user_status] == "SUBSCRIBED"%>
+          <li class="nav-item" >
+            <a href = "/account_details/statistics" style = "text-decoration:none;"><button class = "nav-link" >Statistics</button></a>
+          </li>
+        <% end %>
       <% elsif method == "subscribe"%>
         <li class="nav-item" >
           <a href = "/account_details/profile" style = "text-decoration:none;"><button class = "nav-link ">Your Profile</button></a>
@@ -18,9 +20,11 @@
         <li class="nav-item" >
           <a href = "/account_details/subscribe " style = "text-decoration:none;"><button class = "nav-link active" >Subscription</button></a>
         </li>
-        <li class="nav-item" >
-          <a href = "/account_details/statistics" style = "text-decoration:none;"><button class = "nav-link" >Statistics</button></a>
-        </li>
+        <% if session[:user_status] == "SUBSCRIBED"%>
+          <li class="nav-item" >
+            <a href = "/account_details/statistics" style = "text-decoration:none;"><button class = "nav-link" >Statistics</button></a>
+          </li>
+        <% end %>
       <% elsif method == "statistics"%>
         <li class="nav-item" >
           <a href = "/account_details/profile" style = "text-decoration:none;"><button class = "nav-link ">Your Profile</button></a>
@@ -28,9 +32,11 @@
         <li class="nav-item" >
           <a href = "/account_details/subscribe " style = "text-decoration:none;"><button class = "nav-link" >Subscription</button></a>
         </li>
-        <li class="nav-item" >
-          <a href = "/account_details/statistics" style = "text-decoration:none;"><button class = "nav-link active" >Statistics</button></a>
-        </li>
+        <% if session[:user_status] == "SUBSCRIBED"%>
+          <li class="nav-item" >
+            <a href = "/account_details/statistics" style = "text-decoration:none;"><button class = "nav-link active" >Statistics</button></a>
+          </li>
+        <% end %>
       <% end %>
     </ul>
     <div class="card-body">

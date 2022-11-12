@@ -12,7 +12,7 @@ class TransactionsController < ApplicationController
         @transactions = Transaction.all.where("pos_id = ?", @pos_id.id).where(status: "PAID")
         @transaction_count = @transactions.length()
         @transactions_per_page = 5
-        @transactions = Transaction.offset(@page * @transactions_per_page).limit(@transactions_per_page).order(:dateOfTransaction).where(pos_id: @pos_id.id).where(status: "PAID")
+        @transactions = Transaction.offset(@page * @transactions_per_page).limit(@transactions_per_page).order(dateOfTransaction: :desc).where(pos_id: @pos_id.id).where(status: "PAID")
        
     end
 
@@ -20,7 +20,7 @@ class TransactionsController < ApplicationController
         @pos_id = PosTracker.find_by(user_id: session[:user_id])
         search_type = params[:search_type].to_s
         search_type = "dateOfTransaction"
-        @transactions = Transaction.where("#{search_type} LIKE ? ", "#{params[:search_value]}%").where(pos_id: @pos_id.id).where(status: "PAID").order(:dateOfTransaction)
+        @transactions = Transaction.where("#{search_type} LIKE ? ", "#{params[:search_value]}%").where(pos_id: @pos_id.id).where(status: "PAID").order(dateOfTransaction: :desc)
         respond_to do |format|
           if @transactions.length > 0
               format.turbo_stream{render turbo_stream: turbo_stream.update("transactions",partial: "transactions/search_results", locals:{transactions:@transactions })}
@@ -59,7 +59,6 @@ class TransactionsController < ApplicationController
         pos_id = PosTracker.find_by(user_id: session[:user_id])
         order = nil
         if params[:order_id].present?
-            puts "hello"
             order = Order.find(params[:order_id])
         else
             order = Order.new
@@ -71,8 +70,9 @@ class TransactionsController < ApplicationController
         respond_to do |format|
             if order.valid?
                 product = Product.find(params[:order][:product_id])
-                order.price = product.pricePerUnit.to_i * order.quantity.to_i
+                order.price = product.retail_price.to_i * order.quantity.to_i
                 product.quantity -= order.quantity
+                product.sell_count += order.quantity
                 product.save
                 order.save
                 orders = Order.all.where(transaction_id: params[:order][:transaction_id])

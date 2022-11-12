@@ -42,7 +42,7 @@
                 <tr>
                   <th>Product Name</th>
                   <th>Quantity</th>
-                  <th>Price Per Unit</th>
+                  <th>Retail Price</th>
                   <th>Price</th>
                 </tr>
               </thead>
@@ -52,7 +52,7 @@
                     <% product = Product.find(order.product_id)%>
                     <td><%= product.productName %></td>
                     <td><%= order.quantity%></td>
-                    <td><%=product.pricePerUnit%></td>
+                    <td><%=product.retail_price%></td>
                     <td><%= order.price%></td>
                   </tr>
                 <% end %>

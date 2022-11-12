@@ -52,7 +52,6 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial:"/products/form", locals:{product: @product, message: "Editing a Product"})}
     end
-
   end
 
   # POST /products or /products.json
@@ -60,11 +59,12 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
     @pos_id = PosTracker.find_by(user_id: session[:user_id])
     @product.pos_id = @pos_id.id
+    @product.sell_count = 0
     respond_to do |format|
       if @product.save
         format.html { redirect_to "/products", notice: "Product was successfully created." }
       else
-        format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial: "form",locals:{product: @product})}
+        format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial: "form",locals:{product: @product, message: "Adding New Product"})}
       end
     end
   end
@@ -75,7 +75,7 @@ class ProductsController < ApplicationController
       if @product.update(product_params)
         format.html { redirect_to "/products", notice: "Product was successfully updated." }
       else
-        format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial: "form",locals:{product: @product})}
+        format.turbo_stream{render turbo_stream: turbo_stream.update("input_area",partial: "form",locals:{product: @product, message: "Editing a Product"})}
       end
     end
   end
@@ -98,6 +98,6 @@ class ProductsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.require(:product).permit(:pos_id, :productName, :quantity, :pricePerUnit, :product_type)
+      params.require(:product).permit(:pos_id, :productName, :quantity, :pricePerUnit, :product_type, :sell_count, :retail_price)
     end
 end

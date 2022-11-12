@@ -1,7 +1,7 @@
 <div style = "margin:25px 25px 25px 25px">
   <br>
   <%= form_with(model: product) do |form| %>
-  <h3 style = "text-align:center;"><%= message%></h3>
+    <h3 style = "text-align:center;"><%= message %></h3>
     <div class ="row">
       <% invalid_productName = product.errors.include?(:productName) %>
       <div class = "col-md-3">
@@ -18,7 +18,7 @@
       <% invalid_productType = product.errors.include?(:product_type) %>
       <div class = "col-md-3">
         <label for = "product_type">Product Type:</label>
-        <%= form.select(:product_type, ["Food","Beverage", "Medicine","Body Essential"], {include_blank: "Select Product Type"}, {class: "form-control #{'is-invalid' if invalid_productType}"})%>
+        <%= form.select(:product_type, ["Food","Beverage", "Medicine","Body Essential", "Household Cleaning Product", "Others"], {include_blank: "Select Product Type"}, {class: "form-control #{'is-invalid' if invalid_productType}"})%>
         <% if invalid_productType %>
           <div class="invalid-feedback d-block">
             <% product.errors.full_messages_for(:product_type).each do |error_message| %>
@@ -29,7 +29,7 @@
       </div>
       <% invalid_productQuantity = product.errors.include?(:quantity) %>
       <div class = "col-md-3">
-        <label for = "quantity">Quantity:</label>
+        <label for = "quantity">Stock:</label>
         <%= form.number_field :quantity, class: "form-control #{'is-invalid' if invalid_productQuantity}", step: :any %>
         <% if invalid_productQuantity %>
           <div class="invalid-feedback d-block">
@@ -39,11 +39,11 @@
           </div>
         <% end %>
       </div>
-       <% invalid_productPrice = product.errors.include?(:pricePerUnit) %>
+      <% invalid_productPrice = product.errors.include?(:pricePerUnit) %>
       <div class = "col-md-3">
         <label for = "pricePerUnit">Price Per Unit</label>
         <%= form.number_field :pricePerUnit,class: "form-control #{'is-invalid' if invalid_productPrice}", step: :any %>
-          <% if invalid_productPrice %>
+        <% if invalid_productPrice %>
           <div class="invalid-feedback d-block">
             <% product.errors.full_messages_for(:pricePerUnit).each do |error_message| %>
               <%= error_message %>.
@@ -51,14 +51,26 @@
           </div>
         <% end %>
       </div>
+      <% invalid_retail_price = product.errors.include?(:retail_price) %>
+      <div class = "col-md-3">
+        <label for = "retail Price">Retail Price</label>
+        <%= form.number_field :retail_price,class: "form-control #{'is-invalid' if invalid_retail_price}", step: :any %>
+        <% if invalid_retail_price %>
+          <div class="invalid-feedback d-block">
+            <% product.errors.full_messages_for(:retail_price).each do |error_message| %>
+              <%= error_message %>.
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     </div>
     <br>
-    <div style = "margin-left: 40%; margin-right:40%;">
-      <%= form.submit "Save Product", class: "form-control btn btn-success" %>
+    <div style = "text-align:center; width:100%;">
+      <%= form.submit "Save Product", class: "btn btn-success" %>
     </div>
   <% end %>
   <br>
-  <div style = "margin-left: 40%; margin-right:40%;">
-    <a href= "/products"><button class = "form-control btn btn-danger">Cancel</button></a>
+  <div style = "text-align:center; width:100%;">
+    <a href= "/products"><button class = "btn btn-danger">Cancel</button></a>
   </div>
 </div>

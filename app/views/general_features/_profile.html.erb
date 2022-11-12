@@ -1,35 +1,36 @@
 <div style="overflow-x:hidden; margin: 25px 25px 25px 25px;" class="container-fluid text-xs-center" >
-
-        <p style = "color:green; margin: 25px 25px 25px 25px"><%= notice %></p>
-          <div class = "row" style = "margin:25px 25px 25px 25px;">
-            <div class = "col-md-6">
-              <div class = "row">
-                <div class = "col-md-4">
-                  <%= image_tag("profile_image.png",alt: "Profile Image")%>
-                </div>
-                <div class = "col-md-8">
-                  <p><strong>Username: </strong><%= User.find(session[:user_id]).username %></p>
-                  <p><strong>Status: </strong><%= User.find(session[:user_id]).status %></p>
-                  <% if User.find(session[:user_id]).unsubscriptionDate.present? %>
-                    <p><strong>Unsubscription Date: </strong><%=  User.find(session[:user_id]).unsubscriptionDate  %></p>
-                  <% else %>
-                    <p><strong>Unsubscription Date: </strong> N/A</p>
-                  <% end %>
-                  <% if User.find(session[:user_id]).renewDate.present? %>
-                    <p><strong>Renewal Date: </strong><%= User.find(session[:user_id]).renewDate %></p>
-                  <% else %>
-                    <p><strong>Renewal Date: </strong> N/A</p>
-                  <% end %>
-                  <br>
-                  <%= form_with url:"/change_password", method: :post do |form|%>
-                    <%= form.hidden_field :user_id, :value => session[:user_id]%>
-                    <%= form.submit "Change Password", class: "form-control btn btn-primary"%>
-                  <% end %>
-                </div>
-              </div>
-            </div>
-            <div class = "col-md-6">
-                <div id = "change_password_form"></div>
-            </div>
-          </div>
+  <p style = "color:green; margin: 25px 25px 25px 25px"><%= notice %></p>
+  <div class = "row" style = "margin:25px 25px 25px 25px;">
+    <div class = "col-md-6">
+      <div class = "row">
+        <div class = "col-md-3">
+          <%= image_tag("profile_image.png",alt: "Profile Image", style: "width:100%; height:100%;")%>
         </div>
+        <div class = "col-md-8">
+          <p><strong>Username: </strong><%= User.find(session[:user_id]).username %></p>
+          <p><strong>Status: </strong><%= User.find(session[:user_id]).status %></p>
+          <% if User.find(session[:user_id]).unsubscriptionDate.present? %>
+            <p><strong>Unsubscription Date: </strong><%=  User.find(session[:user_id]).unsubscriptionDate  %></p>
+          <% else %>
+            <p><strong>Unsubscription Date: </strong> N/A</p>
+          <% end %>
+          <% if User.find(session[:user_id]).renewDate.present? %>
+            <p><strong>Renewal Date: </strong><%= User.find(session[:user_id]).renewDate %></p>
+          <% else %>
+            <p><strong>Renewal Date: </strong> N/A</p>
+          <% end %>
+          <br>
+          <%= form_with url:"/change_password", method: :post do |form|%>
+            <%= form.hidden_field :user_id, :value => session[:user_id]%>
+            <%= form.submit "Change Password", class: "form-control btn btn-primary"%>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class = "col-md-6">
+      <div id = "change_password_form"></div>
+    </div>
+  </div>
+</div>
