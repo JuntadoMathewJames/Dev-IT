@@ -1,10 +1,17 @@
 <div style = "margin: 25px 25px 25px 25px">
   <%= form_with url:"/sales/proceed", method: :post, model: sale do |form|%>
     <div class = "row">
+      <% invalid_dateOfSales = sale.errors.include?(:dateOfSales) %>
       <div class = "col-md-4">
-        <%= form.hidden_field :dateOfSales, :value => Date.today() %>
         <label for = "dateOfSales">Date of Sales: </label>
-        <%= form.text_field :displayDateOfSales, :value => Date.today(), :disabled => true, class:"form-control" %>
+        <%= form.date_field :dateOfSales, :value => Date.today(), class: "form-control #{'is-invalid' if invalid_dateOfSales}" %>
+        <% if invalid_dateOfSales %>
+          <div class="invalid-feedback d-block">
+            <% sale.errors.full_messages_for(:dateOfSales).each do |error_message| %>
+              <%= error_message %>.
+            <% end %>
+          </div>
+        <% end %>
       </div>
       <% invalid_beginningBalance = sale.errors.include?(:beginningBalance) %>
       <div class = "col-md-4">
@@ -28,4 +35,9 @@
       <%= form.submit "Proceed", class:"btn btn-success form-control"%>
     </div>
   <% end %>
+  <br>
+  <div style = "margin: 0 auto; width: 40%;">
+    <a href = "/sales"><button class = "btn btn-primary form-control">Back to Sales</button></a>
+  </div>
+  <p id = "errMsg" style = "color:red; text-align:center;"></p>
 </div>
