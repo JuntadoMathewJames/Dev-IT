@@ -132,7 +132,7 @@ class TransactionsController < ApplicationController
         order.destroy
         respond_to do |format|
             orders = Order.all.where("transaction_id = ?",transaction.id)
-            format.turbo_stream{render turbo_stream: turbo_stream.update("cart", partial: "cart", locals:{orders: orders})}
+            format.turbo_stream{render turbo_stream: turbo_stream.update("cart", partial: "cart", locals:{orders: orders, transaction_id: transaction.id })}
         end
     end
 
