@@ -13,13 +13,23 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+ 
+  #for docker use
+  # database: <%= ENV['DB_NAME'] %>
+  # username: <%= ENV['DB_USER'] %>
+  # password: <%= ENV['DB_PASSWORD'] %>
+  # host: <%= ENV['DB_HOST'] %>
+  
+  #for local use
   username: root
   password:
   host: localhost
 
+
 development:
   <<: *default
   database: btaims_development
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -27,6 +37,7 @@ development:
 test:
   <<: *default
   database: btaims_test
+
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -53,3 +64,5 @@ production:
   database: btaims_production
   username: btaims
   password: <%= ENV["BTAIMS_DATABASE_PASSWORD"] %>
+
+

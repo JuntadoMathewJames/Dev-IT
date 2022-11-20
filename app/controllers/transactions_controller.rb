@@ -88,7 +88,7 @@ class TransactionsController < ApplicationController
     def create
         transaction = Transaction.find(params[:transaction_id])
         respond_to do |format|
-            if transaction.totalPrice.present?
+            if transaction.totalPrice.present? && transaction.totalPrice > 0
                 transaction.status = "PAID"
                 transaction.save
                 payment = Payment.new
@@ -107,17 +107,19 @@ class TransactionsController < ApplicationController
     def payment
         transaction = Transaction.find(params[:transaction_id])
         respond_to do |format|
-            if params[:payment].to_i >= params[:totalPrice].to_i
-                transaction.totalPrice = params[:totalPrice]
-                transaction.save
-                change_value = params[:payment].to_i - params[:totalPrice].to_i 
-                format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<input type='number' id = 'change' name = 'change' class = 'form-control' disabled = 'disabled' value = #{change_value}>")}
-            elsif params[:payment].to_i < params[:totalPrice].to_i
-                transaction.totalPrice = nil
-                transaction.save
-                format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<p style = 'color:red'>Payment must be greater than or equals Total Price.</p>")}
-            elsif params[:payment] == nil || params[:payment] == ""
-                format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<input type='number' id = 'change' name = 'change' class = 'form-control' disabled = 'disabled'")}
+            if params[:totalPrice].to_i > 0
+                if params[:payment].to_i >= params[:totalPrice].to_i
+                    transaction.totalPrice = params[:totalPrice]
+                    transaction.save
+                    change_value = params[:payment].to_i - params[:totalPrice].to_i 
+                    format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<input type='number' id = 'change' name = 'change' class = 'form-control' disabled = 'disabled' value = #{change_value}>")}
+                elsif params[:payment].to_i < params[:totalPrice].to_i
+                    transaction.totalPrice = 0
+                    transaction.save
+                    format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<p style = 'color:red'>Payment must be greater than or equals Total Price.</p>")}
+                end
+            else
+                format.turbo_stream{render turbo_stream: turbo_stream.update("change_field","<p style = 'color:red'>Cannot proceed with payment if total price is 0.</p>")}
             end
         end
     end

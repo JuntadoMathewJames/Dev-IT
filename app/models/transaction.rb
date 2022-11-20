@@ -3,5 +3,5 @@ class Transaction < ApplicationRecord
     
     validates :pos_id, :dateOfTransaction, presence:true
     validates :pos_id, numericality:{greater_than:0}
-    validates :totalPrice, presence:true, numericality:{greater_than:0}, on: :update
+    validates :totalPrice, presence:true, numericality:{greater_than_or_equal_to: 0}, on: :update
 end

@@ -12,7 +12,7 @@
               <div class = "col-md-3">
                 <% sum = 0%>
                 <% counter = 0%>
-                <% @transactions.group(:dateOfTransaction).each do |transaction|%>
+                <% @transactions.select(:dateOfTransaction).distinct.each do |transaction|%>
                   <% sum += Transaction.all.where(pos_id: @pos_id.id).where(dateOfTransaction: transaction.dateOfTransaction).length() %>
                   <% counter += 1 %>
                 <% end %>
@@ -138,22 +138,30 @@
               <div class = "col-md-3">
                 <% sum = 0%>
                 <% counter = 0%>
-                <% @payments.group(:dateOfPayment).each do |payment|%>
-                  <% daily_payments = Payment.all.where("dateOfPayment = ?",payment.dateOfPayment).where("pos_id =?",payment.pos_id)%>
+                <% @payments.select(:dateOfPayment).select(:pos_id).distinct.each do |payment|%>
+                  <% daily_payments = Payment.all.where("dateOfPayment = ?",payment.dateOfPayment).where("pos_id = ?",payment.pos_id)%>
                   <% sum += daily_payments.average(:amount)%>
                   <% counter += 1%>
                 <% end %>
-                <p><strong>Average Daily Payments: </strong><%=sum/counter%></p>
+                <% if counter > 0 %>
+                  <p><strong>Average Daily Payments: </strong><%=sum/counter%></p>
+                <% else %>
+                  <p><strong>Average Daily Payments: </strong>0</p>
+                <% end %>
               </div>
               <div class = "col-md-3">
                 <% sum = 0%>
                 <% counter = 0%>
-                <% @expenses.group(:dateOfExpense).each do |expense|%>
-                  <% daily_expenses = Expense.all.where("dateOfExpense = ?",expense.dateOfExpense).where("pos_id =?",expense.pos_id)%>
+                <% @expenses.select(:dateOfExpense).select(:pos_id).distinct.each do |expense|%>
+                  <% daily_expenses = Expense.all.where("dateOfExpense = ?",expense.dateOfExpense).where("pos_id = ?",expense.pos_id)%>
                   <% sum += daily_expenses.average(:amount)%>
                   <% counter += 1%>
                 <% end %>
+                <% if counter > 0%>
                 <p><strong>Average Daily Expenses: </strong><%= sum/counter %></p>
+                <% else %>
+                 <p><strong>Average Daily Expenses: </strong>0</p>
+                <% end %>
               </div>
             </div>
           <% else %>
