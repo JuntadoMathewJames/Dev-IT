@@ -49,11 +49,18 @@
               <tbody>
                 <% @orders.each do |order| %>
                   <tr>
-                    <% product = Product.find(order.product_id)%>
-                    <td><%= product.productName %></td>
-                    <td><%= order.quantity%></td>
-                    <td><%=product.retail_price%></td>
-                    <td><%= order.price%></td>
+                    <% product = Product.find_by(id: order.product_id)%>
+                    <% if product.present? %>
+                      <td><%= product.productName %></td>
+                      <td><%= order.quantity%></td>
+                      <td><%=product.retail_price%></td>
+                      <td><%= order.price%></td>
+                    <% else %>
+                      <td style = "color:red;">Product is deleted.</td>
+                      <td><%= order.quantity%></td>
+                      <td style = "color:red;">Product is deleted.</td>
+                      <td><%= order.price%></td>
+                    <% end %>
                   </tr>
                 <% end %>
               </tbody>

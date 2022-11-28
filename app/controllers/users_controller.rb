@@ -68,6 +68,7 @@ class UsersController < ApplicationController
         respond_to do |format|
             if user.authenticate(params[:confirm_password])
                 user.status = "SUBSCRIBED"
+                user.renewDate = @subscription.dateOfPayment + 30
                 user.save
                 session[:user_status]= user.status
                 @subscription.save
@@ -102,7 +103,7 @@ class UsersController < ApplicationController
 
     def renew_subscription
         user = User.find(params[:user_id])
-        user.renewDate = user.unsubscriptionDate + 30
+        user.renewDate = user.unsubscriptionDate
         respond_to do |format|
             if user.renewDate== Date.today()
                 subscription = Subscription.new

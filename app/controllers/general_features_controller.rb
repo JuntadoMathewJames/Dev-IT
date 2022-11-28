@@ -21,7 +21,6 @@ class GeneralFeaturesController < ApplicationController
             @expenses = Expense.all.where("pos_id = ?",@pos_id.id)
             @payments = Payment.all.where("pos_id = ?",@pos_id.id)
             else
-               
                redirect_to "/account_details/subscribe"
             end
 
