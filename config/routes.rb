@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get "/logout", to:"users#logout"
   get "/account_details/:method",to:"general_features#account_details"
   get "/dashboard",to:"general_features#index"
-  get "/pos",to:"general_features#pos"
+  get "/pos",to:"sales#index"
   post "/register/proceed",to:"users#register_proceed"
   post "/login/proceed",to:"users#login_proceed"
   post "/subscribe/proceed", to:"users#subscribe_proceed"
