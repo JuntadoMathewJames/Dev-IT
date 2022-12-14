@@ -71,8 +71,8 @@ class TransactionsController < ApplicationController
             if order.valid?
                 product = Product.find(params[:order][:product_id])
                 order.price = product.retail_price.to_i * order.quantity.to_i
-                product.quantity -= order.quantity
-                product.sell_count += order.quantity
+                product.quantity -= order.quantity.to_i
+                product.sell_count = order.quantity.to_i
                 product.save
                 order.save
                 orders = Order.all.where(transaction_id: params[:order][:transaction_id])
