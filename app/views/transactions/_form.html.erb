@@ -35,14 +35,14 @@
     </div>
     <%= form.hidden_field :transaction_id, :value => transaction %>
     <br>
-    <div style = "margin: 0 auto; width: 40%;">
-      <%= form.button nil, class: "form-control btn btn-success" do %>
+    <div style = "text-align:center;">
+      <%= form.button nil, class: "btn btn-success" do %>
         Add to Cart <i class="fa-solid fa-cart-shopping"></i>
       <% end %>
     </div>
   <% end %>
   <br>
-  <div style = "margin: 0 auto; width: 40%;">
-    <a href= "/transactions"><button class = "btn btn-danger form-control">Cancel Transaction <i class="fa-solid fa-ban"></i></button></a>
+  <div style = "text-align:center;">
+    <a href= "/transactions"><button class = "btn btn-danger">Cancel Transaction <i class="fa-solid fa-ban"></i></button></a>
   </div>
 </div>

@@ -13,9 +13,7 @@
         <td><%= expense.description%></td>
         <td><%= expense.amount%></td>
         <td>
-          <div class = "row">
-            <%= link_to  "Delete", "/sales/expense/#{sale.id}/#{expense.id}/destroy", class:"btn btn-danger form-control", data: { turbo_method: :delete} %>
-          </div>
+          <%= link_to  "Delete", "/sales/expense/#{sale.id}/#{expense.id}/destroy", class:"btn btn-danger", data: { turbo_method: :delete} %>
         </td>
       </tr>
     <% end %>

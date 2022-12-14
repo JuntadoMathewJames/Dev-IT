@@ -41,7 +41,7 @@
           <div id = "list_of_expenses_area" style = "margin: 25px 25px 25px 25px">
             <%= render partial:"sales/display_expenses", locals:{expenses: @expenses, expenseDate: @sale.dateOfSales, sale: @sale}%>
           </div>
-          <div style = "margin: 0 auto; width:30%;">
+          <div style = "text-align:center;">
             <%= form_with url:"/sales/generate", method: :post do |form|%>
               <%= form.hidden_field :sale_id, :value => @sale.id%>
               <%= form.submit "Generate Sale", class: "btn btn-success form-control"%>
