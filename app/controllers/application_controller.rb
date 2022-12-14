@@ -18,8 +18,8 @@ class ApplicationController < ActionController::Base
 
     def checkUserUnsubscriptionDate
         user = User.find(session[:user_id])
-        if user.unsubscriptionDate.present?
-            if Date.today() == user.unsubscriptionDate
+        if user.unsubscriptionDate != nil
+            if Date.today() >= user.unsubscriptionDate
                 user.status = "UNSUBSCRIBED"
                 session[:user_status] = user.status
                 user.unsubscriptionDate = nil
@@ -31,15 +31,16 @@ class ApplicationController < ActionController::Base
 
     def checkUserRenewalDate
         user = User.find(session[:user_id])
-        if user.renewDate.present?
-            if Date.today() == user.renewDate
+        if user.renewDate != nil
+            if Date.today() >= user.renewDate
+                puts "hello world"
                 subscription = Subscription.new
                 subscription.user_id = user.id
                 subscription.payment = 60
-                subscription.dateOfPayment = Date.today()
+                subscription.dateOfPayment = user.renewDate
                 subscription.save
                 user.status = "SUBSCRIBED"
-                user.renewDate = nil
+                user.renewDate = user.renewDate + 30
                 user.unsubscriptionDate = nil
                 session[:user_status]= user.status
                 user.save
