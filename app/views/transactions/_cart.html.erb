@@ -14,7 +14,7 @@
         <% order_product = Product.find(order.product_id)%>
         <td><%= order_product.productName %></td>
         <td><%= order.quantity%></td>
-        <td><%= order_product.pricePerUnit %></td>
+        <td><%= order_product.retail_price %></td>
         <td><%= order.price%></td>
         <td>
           <%= form_with url:"/transactions/order/#{order.id}/delete", method: :post do |form|%>
